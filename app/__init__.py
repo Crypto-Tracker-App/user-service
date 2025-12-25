@@ -1,30 +1,32 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-import os
+from os import getenv
 
-db = SQLAlchemy()
-bcrypt = Bcrypt()
+from .config import DevelopmentConfig, ProductionConfig
+from .extensions import db, session_manager
+
 
 def create_app():
     app = Flask(__name__)
     
-    # Database configuration
-    database_url = os.getenv(
-        'DATABASE_URL',
-        'postgresql://dev_user:dev_password@localhost:5432/userservice_db'
-    )
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+    # Load configuration based on environment
+    env = getenv('FLASK_ENV', 'development')
+    if env == 'production':
+        app.config.from_object(ProductionConfig)
+    else:
+        app.config.from_object(DevelopmentConfig)
     
     # Initialize extensions
     db.init_app(app)
-    bcrypt.init_app(app)
+    session_manager.init_app(app)
     
     # Register blueprints
-    from app.routes import main
-    app.register_blueprint(main)
+    from .api import auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/api/auth')
+    
+    # Register health check
+    @app.route('/health', methods=['GET'])
+    def health_check():
+        return {'status': 'healthy', 'service': 'user-service'}, 200
     
     # Create tables
     with app.app_context():
