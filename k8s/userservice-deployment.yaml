@@ -25,8 +25,8 @@ spec:
           value: "production"
         - name: DATABASE_URL
           valueFrom:
-            configMapKeyRef:
-              name: userservice-config
+            secretKeyRef:
+              name: userservice-secret
               key: DATABASE_URL
         resources:
           requests:

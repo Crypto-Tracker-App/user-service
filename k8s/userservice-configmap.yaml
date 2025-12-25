@@ -4,3 +4,4 @@ metadata:
   name: userservice-config
 data:
   FLASK_ENV: "production"
+  FRONTEND_URL: "http://localhost:80"
