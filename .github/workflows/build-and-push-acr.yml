@@ -74,8 +74,10 @@ jobs:
           cluster-name: ${{ vars.AKS_NAME }}
           resource-group: ${{ vars.AKS_RG }}
 
-      - name: Apply userservice-config ConfigMap
-        run: kubectl apply -f k8s/userservice-configmap.yaml
+      - name: Ensure userservice-config ConfigMap
+        run: |
+          kubectl delete configmap userservice-config --ignore-not-found
+          kubectl apply -f k8s/userservice-configmap.yaml
 
       - name: Deploy to AKS
         run: |
