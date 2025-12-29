@@ -68,14 +68,14 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Apply userservice-config ConfigMap
-        run: kubectl apply -f k8s/userservice-configmap.yaml
-
       - name: Set AKS context
         uses: azure/aks-set-context@v3
         with:
           cluster-name: ${{ vars.AKS_NAME }}
           resource-group: ${{ vars.AKS_RG }}
+
+      - name: Apply userservice-config ConfigMap
+        run: kubectl apply -f k8s/userservice-configmap.yaml
 
       - name: Deploy to AKS
         run: |
