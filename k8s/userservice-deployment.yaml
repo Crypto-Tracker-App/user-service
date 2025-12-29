@@ -87,7 +87,6 @@ spec:
               name: userservice-secret
               key: SECRET_KEY
         resources:
-          resources:
           requests:
             memory: "64Mi"
             cpu: "50m"
