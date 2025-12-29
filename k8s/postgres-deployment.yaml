@@ -74,4 +74,4 @@ spec:
       volumes:
       - name: postgres-storage
         persistentVolumeClaim:
-          claimName: user-service-db-pvc
+          claimName: user-service-db-pvc-v2
