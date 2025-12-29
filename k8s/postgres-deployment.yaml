@@ -40,13 +40,12 @@ spec:
         - name: postgres-storage
           mountPath: /var/lib/postgresql/data
         resources:
-          resources:
           requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
             memory: "128Mi"
             cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "250m"
         livenessProbe:
           exec:
             command:
@@ -73,5 +72,4 @@ spec:
           failureThreshold: 3
       volumes:
       - name: postgres-storage
-        persistentVolumeClaim:
-          claimName: user-service-db-pvc-v2
+        emptyDir: {}
