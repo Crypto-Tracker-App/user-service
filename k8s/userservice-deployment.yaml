@@ -36,6 +36,11 @@ spec:
             configMapKeyRef:
               name: userservice-config
               key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: DB_PORT
         - name: POSTGRES_PORT
           valueFrom:
             configMapKeyRef:
