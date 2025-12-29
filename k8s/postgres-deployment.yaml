@@ -23,13 +23,13 @@ spec:
         env:
         - name: POSTGRES_DB
           valueFrom:
-            secretKeyRef:
-              name: userservice-secret
+            configMapKeyRef:
+              name: userservice-config
               key: POSTGRES_DB
         - name: POSTGRES_USER
           valueFrom:
-            secretKeyRef:
-              name: userservice-secret
+            configMapKeyRef:
+              name: userservice-config
               key: POSTGRES_USER
         - name: POSTGRES_PASSWORD
           valueFrom:

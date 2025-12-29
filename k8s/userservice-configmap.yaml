@@ -10,3 +10,5 @@ data:
   REDIS_HOST: "redis"
   REDIS_PORT: "6379"
   PORT: "5000"
+  POSTGRES_USER: "dev_user"
+  POSTGRES_DB: "userservice_db"

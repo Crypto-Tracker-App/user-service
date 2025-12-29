@@ -22,16 +22,15 @@ spec:
         - containerPort: 5000
         env:
         - name: FLASK_ENV
-          value: "production"
-        - name: DATABASE_URL
           valueFrom:
-            secretKeyRef:
-              name: userservice-secret
-              key: DATABASE_URL
-        - name: REDIS_HOST
-          value: "redis"
-        - name: REDIS_PORT
-          value: "6379"
+            configMapKeyRef:
+              name: userservice-config
+              key: FLASK_ENV
+        - name: FRONTEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: FRONTEND_URL
         - name: DB_HOST
           valueFrom:
             configMapKeyRef:
@@ -42,6 +41,46 @@ spec:
             configMapKeyRef:
               name: userservice-config
               key: DB_PORT
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: POSTGRES_USER
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: POSTGRES_DB
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: REDIS_PORT
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: PORT
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: userservice-secret
+              key: POSTGRES_PASSWORD
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: userservice-secret
+              key: REDIS_PASSWORD
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: userservice-secret
+              key: SECRET_KEY
         resources:
           requests:
             memory: "128Mi"
