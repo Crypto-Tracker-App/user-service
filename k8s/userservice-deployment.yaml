@@ -28,6 +28,10 @@ spec:
             secretKeyRef:
               name: userservice-secret
               key: DATABASE_URL
+        - name: REDIS_HOST
+          value: "redis"
+        - name: REDIS_PORT
+          value: "6379"
         resources:
           requests:
             memory: "128Mi"
