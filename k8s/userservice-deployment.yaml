@@ -32,6 +32,16 @@ spec:
           value: "redis"
         - name: REDIS_PORT
           value: "6379"
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: DB_PORT
         resources:
           requests:
             memory: "128Mi"
