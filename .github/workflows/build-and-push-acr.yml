@@ -74,20 +74,19 @@ jobs:
           cluster-name: ${{ vars.AKS_NAME }}
           resource-group: ${{ vars.AKS_RG }}
 
+      - name: Deploy PostgreSQL and Redis
+        run: |
+          kubectl apply -f k8s/postgresql-deployment.yaml
+          kubectl apply -f k8s/postgresql-service.yaml
+          kubectl apply -f k8s/redis-deployment.yaml
+          kubectl apply -f k8s/redis-service.yaml
+
       - name: Apply userservice ConfigMap
         run: |
           kubectl apply -f k8s/userservice-configmap.yaml
           kubectl apply -f k8s/userservice-secret.yaml
           kubectl get configmap userservice-config
           kubectl get secret userservice-secret
-
-      - name: Deploy dependencies
-        run: |
-          kubectl apply -f k8s/postgres-deployment.yaml
-          kubectl apply -f k8s/postgres-service.yaml
-          kubectl apply -f k8s/postgres-pvc.yaml
-          kubectl apply -f k8s/redis-deployment.yaml
-          kubectl apply -f k8s/redis-service.yaml
 
       - name: Deploy user-service
         run: |

@@ -33,7 +33,7 @@ spec:
             secretKeyRef:
               name: userservice-secret
               key: POSTGRES_PASSWORD
-        command: ['sh', '-c', 'until pg_isready -h user-service-db -p 5432; do echo waiting for db; sleep 2; done']
+        command: ['sh', '-c', 'until pg_isready -h postgresql -p 5432; do echo waiting for db; sleep 2; done']
       containers:
       - name: user-service
         image: cryptotracker.azurecr.io/user-service:latest
