@@ -14,6 +14,26 @@ spec:
       labels:
         app: user-service
     spec:
+      initContainers:
+      - name: wait-for-db
+        image: postgres:16-alpine
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: POSTGRES_USER
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: POSTGRES_DB
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: userservice-secret
+              key: POSTGRES_PASSWORD
+        command: ['sh', '-c', 'until pg_isready -h user-service-db -p 5432; do echo waiting for db; sleep 2; done']
       containers:
       - name: user-service
         image: cryptotracker.azurecr.io/user-service:latest
