@@ -3,9 +3,11 @@ kind: ConfigMap
 metadata:
   name: userservice-config
 data:
+  FLASK_ENV: "production"
   FRONTEND_URL: "http://localhost:3000"
   DB_HOST: "postgresql"
   DB_PORT: "5432"
+  POSTGRES_PORT: "5432"
   POSTGRES_USER: "user"
   POSTGRES_DB: "crypto_tracker"
   REDIS_HOST: "redis"
