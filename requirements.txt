@@ -7,5 +7,5 @@ redis
 Flask-Session
 Werkzeug
 SQLAlchemy
-
+requests
 pytest
