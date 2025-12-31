@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pricing-service-db
+  name: user-service-db
   labels:
-    app: pricing-service-db
+    app: user-service-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pricing-service-db
+      app: user-service-db
   template:
     metadata:
       labels:
-        app: pricing-service-db
+        app: user-service-db
     spec:
       containers:
       - name: postgresql
