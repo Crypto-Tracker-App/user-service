@@ -18,6 +18,11 @@ spec:
       - name: wait-for-db
         image: postgres:16-alpine
         env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: userservice-config
+              key: DB_HOST
         - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
