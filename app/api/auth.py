@@ -61,3 +61,14 @@ def verify_session():
                  'username': g.current_user['username']
             }
         }), 200
+
+@auth_blueprint.route('/current-user', methods=['GET'])
+@auth_required
+def current_user():
+    return jsonify({
+        'user': {
+            'id': g.current_user['user_id'],
+            'username': g.current_user['username']
+        }
+    }), 200
+    
