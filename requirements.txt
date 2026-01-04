@@ -9,3 +9,4 @@ Werkzeug
 SQLAlchemy
 requests
 pytest
+flasgger==0.9.7.1
