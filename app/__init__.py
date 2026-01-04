@@ -1,5 +1,6 @@
 from flask import Flask
 from os import getenv
+from flasgger import Swagger
 
 from .config import DevelopmentConfig, ProductionConfig
 from .extensions import db, session_manager
@@ -18,6 +19,39 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     session_manager.init_app(app)
+    
+    # Configure Swagger/OpenAPI
+    swagger_config = {
+        'specs': [
+            {
+                'endpoint': 'apispec',
+                'route': '/apispec.json'
+            }
+        ],
+        'specs_route': '/apidocs/',
+        'static_url_path': '/flasgger_static',
+        'swagger_ui': True,
+        'headers': []
+    }
+    
+    swagger_template = {
+        'swagger': '2.0',
+        'info': {
+            'title': 'User Service API',
+            'description': 'Authentication and user management API',
+            'version': '1.0.0'
+        },
+        'securityDefinitions': {
+            'SessionAuth': {
+                'type': 'apiKey',
+                'name': 'session_id',
+                'in': 'cookie',
+                'description': 'Session-based authentication'
+            }
+        }
+    }
+    
+    Swagger(app, config=swagger_config, template=swagger_template)
     
     # Register blueprints
     from .api import auth_blueprint
