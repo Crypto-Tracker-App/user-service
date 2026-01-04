@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pricing-service-redis
+  name: user-service-redis
   labels:
-    app: pricing-service-redis
+    app: user-service-redis
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pricing-service-redis
+      app: user-service-redis
   template:
     metadata:
       labels:
-        app: pricing-service-redis
+        app: user-service-redis
     spec:
       containers:
       - name: redis
