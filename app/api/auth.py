@@ -4,7 +4,7 @@ from ..middleware.auth_middleware import auth_required
 from ..services.auth_service import AuthService
 from ..services.session_service import SessionService
 
-auth_blueprint = Blueprint('auth', __name__)
+auth_blueprint = Blueprint('api', __name__)
 
 @auth_blueprint.route('/register', methods=["POST"])
 def register():
