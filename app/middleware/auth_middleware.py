@@ -2,6 +2,7 @@ from flask import jsonify, g, request
 from functools import wraps
 import logging
 
+
 from ..services.jwt_service import JWTService
 
 logger = logging.getLogger(__name__)
