@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_session import Session
+from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
-session_manager = Session()
+bcrypt = Bcrypt()

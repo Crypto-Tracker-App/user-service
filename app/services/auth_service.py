@@ -1,7 +1,7 @@
 import logging
 from ..extensions import db
 from ..models import User
-from .session_service import SessionService
+from .jwt_service import JWTService
 
 logger = logging.getLogger(__name__)
 
@@ -37,8 +37,9 @@ class AuthService:
             if not password_valid:
                 return {"error": "Invalid credentials", "status_code": 403}
             
-            SessionService.create_session(user.id, user.username)
+            token = JWTService.create_token(user.id, user.username)
             return {
+                "token": token,
                 "user": {"id": user.id, "username": user.username},
                 "status_code": 200
             }

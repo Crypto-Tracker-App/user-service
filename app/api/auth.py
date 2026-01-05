@@ -3,7 +3,7 @@ import logging
 
 from ..middleware.auth_middleware import auth_required
 from ..services.auth_service import AuthService
-from ..services.session_service import SessionService
+from ..services.jwt_service import JWTService
 
 logger = logging.getLogger(__name__)
 auth_blueprint = Blueprint('api', __name__)
@@ -45,7 +45,10 @@ def login():
         result = AuthService.login_user(username, password)
         if 'error' in result: 
             return jsonify({'error': result['error']}), result['status_code']
-        return jsonify({'user':result['user']}), result['status_code']
+        return jsonify({
+            'token': result['token'],
+            'user': result['user']
+        }), result['status_code']
     except Exception as e:
         logger.error(f"Login endpoint error: {str(e)}", exc_info=True)
         return jsonify({'error': 'Internal Server Error'}), 500
@@ -54,20 +57,36 @@ def login():
 @auth_blueprint.route('/logout', methods=['POST'])
 @auth_required
 def logout():
-    SessionService.clear_session()
+    # With JWT, logout is handled client-side by removing the token
     return jsonify({'message':'Logged out successfully'}), 200
 
 
 @auth_blueprint.route('/verify-session', methods=['GET'])
 def verify_session():
-    return jsonify({
-        'message':'Session valid',
-        'user': {'id': g.current_user['user_id'],
-                 'username': g.current_user['username']
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        token = auth_header.split(' ')[1] if ' ' in auth_header else auth_header
+        user_data = JWTService.verify_token(token)
+        
+        if not user_data:
+            return jsonify({'error': 'Invalid or expired token'}), 401
+        
+        return jsonify({
+            'message': 'Token valid',
+            'user': {
+                'id': user_data['user_id'],
+                'username': user_data['username']
             }
         }), 200
+    except Exception as e:
+        logger.error(f"Token verification error: {str(e)}")
+        return jsonify({'error': 'Invalid token'}), 401
 
 @auth_blueprint.route('/current-user', methods=['GET'])
+@auth_required
 def current_user():
     return jsonify({
         'user': {

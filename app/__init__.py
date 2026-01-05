@@ -3,7 +3,7 @@ from os import getenv
 import logging
 
 from .config import ProductionConfig
-from .extensions import db, session_manager
+from .extensions import db, bcrypt
 
 
 def create_app():
@@ -18,7 +18,7 @@ def create_app():
     
     # Initialize extensions
     db.init_app(app)
-    session_manager.init_app(app)
+    bcrypt.init_app(app)
     
     # Register blueprints
     from .api import auth_blueprint
