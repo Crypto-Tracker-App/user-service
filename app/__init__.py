@@ -1,5 +1,6 @@
 from flask import Flask
 from os import getenv
+import logging
 
 from .config import DevelopmentConfig, ProductionConfig
 from .extensions import db, session_manager
@@ -8,12 +9,12 @@ from .extensions import db, session_manager
 def create_app():
     app = Flask(__name__)
     
-    # Load configuration based on environment
-    env = getenv('FLASK_ENV', 'development')
-    if env == 'production':
-        app.config.from_object(ProductionConfig)
-    else:
-        app.config.from_object(DevelopmentConfig)
+    # Configure logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    
+    app.config.from_object(ProductionConfig)
+
     
     # Initialize extensions
     db.init_app(app)

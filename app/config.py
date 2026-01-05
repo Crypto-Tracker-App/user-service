@@ -1,7 +1,5 @@
-from redis import Redis
-
-
 import os
+from redis import Redis
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY")

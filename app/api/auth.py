@@ -1,9 +1,11 @@
 from flask import Blueprint, request, jsonify, g
+import logging
 
 from ..middleware.auth_middleware import auth_required
 from ..services.auth_service import AuthService
 from ..services.session_service import SessionService
 
+logger = logging.getLogger(__name__)
 auth_blueprint = Blueprint('api', __name__)
 
 @auth_blueprint.route('/register', methods=["POST"])
@@ -28,21 +30,25 @@ def register():
 
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    
-    if not data:
-        return jsonify({'error': 'Invalid request'}), 400
-    
-    username = data.get('username')
-    password = data.get('password')
-    
-    if not all([username, password]):
-        return jsonify({'error':'All fields required'}), 400
-    
-    result = AuthService.login_user(username, password)
-    if 'error' in result: 
-        return jsonify({'error': result['error']}), result['status_code']
-    return jsonify({'user':result['user']}), result['status_code']
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'error': 'Invalid request'}), 400
+        
+        username = data.get('username')
+        password = data.get('password')
+        
+        if not all([username, password]):
+            return jsonify({'error':'All fields required'}), 400
+        
+        result = AuthService.login_user(username, password)
+        if 'error' in result: 
+            return jsonify({'error': result['error']}), result['status_code']
+        return jsonify({'user':result['user']}), result['status_code']
+    except Exception as e:
+        logger.error(f"Login endpoint error: {str(e)}", exc_info=True)
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 
 @auth_blueprint.route('/logout', methods=['POST'])

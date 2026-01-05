@@ -1,7 +1,9 @@
+import logging
 from ..extensions import db
 from ..models import User
 from .session_service import SessionService
 
+logger = logging.getLogger(__name__)
 
 class AuthService:
     @staticmethod
@@ -34,11 +36,12 @@ class AuthService:
             password_valid = user.check_password(password)
             if not password_valid:
                 return {"error": "Invalid credentials", "status_code": 403}
+            
             SessionService.create_session(user.id, user.username)
             return {
-                "message": "Login successful",
                 "user": {"id": user.id, "username": user.username},
                 "status_code": 200
             }
-        except Exception:
+        except Exception as e:
+            logger.error(f"Login error: {str(e)}", exc_info=True)
             return {"error": "Internal Server Error", "status_code": 500}
