@@ -2,7 +2,7 @@ from flask import Flask
 from os import getenv
 import logging
 
-from .config import DevelopmentConfig, ProductionConfig
+from .config import ProductionConfig
 from .extensions import db, session_manager
 
 

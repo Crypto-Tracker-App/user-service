@@ -59,7 +59,6 @@ def logout():
 
 
 @auth_blueprint.route('/verify-session', methods=['GET'])
-@auth_required
 def verify_session():
     return jsonify({
         'message':'Session valid',
@@ -69,7 +68,6 @@ def verify_session():
         }), 200
 
 @auth_blueprint.route('/current-user', methods=['GET'])
-@auth_required
 def current_user():
     return jsonify({
         'user': {
