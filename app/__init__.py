@@ -21,7 +21,7 @@ def create_app():
     
     # Register blueprints
     from .api import auth_blueprint
-    app.register_blueprint(auth_blueprint, url_prefix='/api/auth')
+    app.register_blueprint(auth_blueprint, url_prefix='/user-service')
     
     # Create tables
     with app.app_context():
