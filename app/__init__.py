@@ -44,7 +44,7 @@ def create_app():
         },
         'securityDefinitions': {
             'BearerAuth': {
-                'type': 'http',
+                'type': 'apiKey',
                 'name': 'Authorization',
                 'scheme': 'bearer',
                 'bearerFormat': 'JWT',
