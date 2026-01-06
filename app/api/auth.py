@@ -259,6 +259,7 @@ def current_user():
                   type: string
       401:
         description: Unauthorized - token invalid or expired
+        schema:
           type: object
           properties:
             error:
