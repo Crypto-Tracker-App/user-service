@@ -101,6 +101,9 @@ def login():
         schema:
           type: object
           properties:
+            token:
+              type: string
+              description: JWT Bearer token
             user:
               type: object
               properties:
@@ -151,12 +154,12 @@ def login():
 @auth_required
 def logout():
     """
-    Logout the current user. Handeled by frontend by deleting the token.
+    Logout the current user. Handled by frontend by deleting the token.
     ---
     tags:
       - Authentication
     security:
-      - SessionAuth: []
+      - BearerAuth: []
     responses:
       200:
         description: User logged out successfully
@@ -180,12 +183,12 @@ def logout():
 @auth_blueprint.route('/verify-session', methods=['GET'])
 def verify_session():
     """
-    Verify if the current login session is valid
+    Verify if the current JWT token is valid
     ---
     tags:
       - Authentication
     security:
-      - SessionAuth: []
+      - BearerAuth: []
     responses:
       200:
         description: Session is valid
@@ -202,7 +205,7 @@ def verify_session():
                 username:
                   type: string
       401:
-        description: Unauthorized - session invalid or expired
+        description: Unauthorized - token invalid or expired
         schema:
           type: object
           properties:
@@ -240,7 +243,7 @@ def current_user():
     tags:
       - Authentication
     security:
-      - SessionAuth: []
+      - BearerAuth: []
     responses:
       200:
         description: Current user information retrieved successfully
@@ -255,8 +258,7 @@ def current_user():
                 username:
                   type: string
       401:
-        description: Unauthorized - session invalid or expired
-        schema:
+        description: Unauthorized - token invalid or expired
           type: object
           properties:
             error:

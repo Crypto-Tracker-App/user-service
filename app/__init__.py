@@ -47,11 +47,15 @@ def create_app():
             'version': '1.0.0'
         },
         'securityDefinitions': {
-            'SessionAuth': {
+            'BearerAuth': {
                 'type': 'apiKey',
-                'name': 'session_id',
-                'in': 'cookie',
-                'description': 'Session-based authentication'
+                'name': 'Authorization',
+                'in': 'header',
+                'description': 'JWT Bearer token authentication',
+                'schema': {
+                    'type': 'string',
+                    'format': 'Bearer <token>'
+                }
             }
         }
     }
