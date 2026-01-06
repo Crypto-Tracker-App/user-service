@@ -47,9 +47,9 @@ def create_app():
                 'type': 'apiKey',
                 'name': 'Authorization',
                 'scheme': 'bearer',
-                'bearerFormat': 'JWT',
+                'bearerFormat': 'bearer',
                 'in': 'header',
-                'description': 'JWT Bearer token authentication',
+                'description': 'Type in the *\'Value\'* input box below: **\'Bearer &lt;JWT&gt;\'**, where JWT is the token',
             }
         }
     }
