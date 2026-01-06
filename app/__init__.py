@@ -52,7 +52,7 @@ def create_app():
         },
         "security": [
             {
-                "Bearer": []
+                "BearerAuth": []
             }
         ]
     }
