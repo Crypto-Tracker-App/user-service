@@ -44,17 +44,14 @@ def create_app():
         },
         'securityDefinitions': {
             'BearerAuth': {
-                'type': 'apiKey',
+                'type': 'http',
                 'name': 'Authorization',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
                 'in': 'header',
                 'description': 'JWT Bearer token authentication',
             }
-        },
-        "security": [
-            {
-                "BearerAuth": []
-            }
-        ]
+        }
     }
     
     Swagger(app, config=swagger_config, template=swagger_template)
