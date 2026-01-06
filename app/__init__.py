@@ -48,12 +48,13 @@ def create_app():
                 'name': 'Authorization',
                 'in': 'header',
                 'description': 'JWT Bearer token authentication',
-                'schema': {
-                    'type': 'string',
-                    'format': 'Bearer <token>'
-                }
             }
-        }
+        },
+        "security": [
+            {
+                "Bearer": []
+            }
+        ]
     }
     
     Swagger(app, config=swagger_config, template=swagger_template)
