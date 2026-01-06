@@ -14,10 +14,10 @@ class JWTService:
     def get_secret_key():
         """Get SECRET_KEY from Flask app config, fallback to environment."""
         try:
-            return current_app.config.get('SECRET_KEY', os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production"))
+            return current_app.config.get('SECRET_KEY', os.environ.get("SECRET_KEY", "crypto_tracker_super_secret_key"))
         except RuntimeError:
             # Outside of app context
-            return os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
+            return os.environ.get("SECRET_KEY", "crypto_tracker_super_secret_key")
     
     @staticmethod
     def create_token(user_id: int, username: str) -> str:

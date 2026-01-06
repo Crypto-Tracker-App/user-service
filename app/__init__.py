@@ -1,7 +1,5 @@
 from flask import Flask
-from os import getenv
 import logging
-from flask_cors import CORS
 
 from .config import ProductionConfig
 from .extensions import db, bcrypt
@@ -20,9 +18,6 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     bcrypt.init_app(app)
-    
-    # Enable CORS for all routes
-    CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
     
     # Register blueprints
     from .api import auth_blueprint
