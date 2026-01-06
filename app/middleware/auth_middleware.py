@@ -1,20 +1,34 @@
-from flask import jsonify, g
+from flask import jsonify, g, request
 from functools import wraps
+import logging
 
-from ..services.session_service import SessionService
+
+from ..services.jwt_service import JWTService
+
+logger = logging.getLogger(__name__)
 
 def auth_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        session_data = SessionService.verify_session()
+        auth_header = request.headers.get('Authorization')
         
-        if 'error' in session_data:
-            return jsonify({'error':'Authentication required'}), 401
+        if not auth_header:
+            return jsonify({'error': 'Authorization required'}), 401
         
-        g.current_user = {
-            'user_id' : session_data['user_id'], 
-            'username' : session_data['username']
-        }
-        
-        return f(*args, **kwargs)
+        try:
+            token = auth_header.split(' ')[1] if ' ' in auth_header else auth_header
+            user_data = JWTService.verify_token(token)
+            
+            if not user_data:
+                return jsonify({'error': 'Invalid or expired token'}), 401
+            
+            g.current_user = {
+                'user_id': user_data['user_id'],
+                'username': user_data['username']
+            }
+            
+            return f(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Auth middleware error: {str(e)}")
+            return jsonify({'error': 'Authentication failed'}), 401
     return decorated

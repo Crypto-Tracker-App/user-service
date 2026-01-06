@@ -1,24 +1,29 @@
 from flask import Flask
 from os import getenv
 from flasgger import Swagger
+import logging
+from flask_cors import CORS
 
-from .config import DevelopmentConfig, ProductionConfig
-from .extensions import db, session_manager
+from .config import ProductionConfig
+from .extensions import db, bcrypt
 
 
 def create_app():
     app = Flask(__name__)
     
-    # Load configuration based on environment
-    env = getenv('FLASK_ENV', 'development')
-    if env == 'production':
-        app.config.from_object(ProductionConfig)
-    else:
-        app.config.from_object(DevelopmentConfig)
+    # Configure logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    
+    app.config.from_object(ProductionConfig)
+
     
     # Initialize extensions
     db.init_app(app)
-    session_manager.init_app(app)
+    bcrypt.init_app(app)
+    
+    # Enable CORS for all routes
+    CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
     
     # Configure Swagger/OpenAPI
     swagger_config = {
@@ -55,7 +60,7 @@ def create_app():
     
     # Register blueprints
     from .api import auth_blueprint
-    app.register_blueprint(auth_blueprint, url_prefix='/api/auth')
+    app.register_blueprint(auth_blueprint, url_prefix='/api')
     
     # Create tables
     with app.app_context():
