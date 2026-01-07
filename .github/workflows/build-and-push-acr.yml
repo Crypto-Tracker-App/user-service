@@ -21,6 +21,14 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'requirements.txt'
+
+      - name: Install dependencies and verify build
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # TODO: add tests when available
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -71,19 +79,7 @@ jobs:
           cluster-name: ${{ vars.AKS_NAME }}
           resource-group: ${{ vars.AKS_RG }}
 
-      - name: Apply userservice ConfigMap
+      - name: Force pod image update
         run: |
-          kubectl apply -f k8s/userservice-configmap.yaml
-          kubectl apply -f k8s/userservice-secret.yaml
-          kubectl get configmap userservice-config
-          kubectl get secret userservice-secret
-
-      - name: Deploy user-service
-        run: |
-          kubectl apply -f k8s/userservice-deployment.yaml
-          kubectl apply -f k8s/userservice-service.yaml
-
-          kubectl rollout restart deployment/user-service
-          kubectl rollout status deployment/user-service --timeout=180s
-
-          kubectl get pods
+          kubectl rollout restart deployment/user-service -n default
+          kubectl rollout status deployment/user-service -n default --timeout=180s
