@@ -51,13 +51,21 @@ def create_app():
                 'in': 'header',
                 'description': 'Type in the *\'Value\'* input box below: **\'Bearer &lt;JWT&gt;\'**, where JWT is the token',
             }
-        }
+        },
+        'tags': [
+            {
+                'name': 'Health',
+                'description': 'Health and readiness endpoints'
+            }
+        ]
     }
     
     Swagger(app, config=swagger_config, template=swagger_template)
     
     # Register blueprints
     from .api import auth_blueprint
+    from .api.health import health_bp
+    app.register_blueprint(health_bp)
     app.register_blueprint(auth_blueprint, url_prefix='/api')
     
     # Create tables
