@@ -3,7 +3,7 @@ from os import getenv
 from flasgger import Swagger
 import logging
 
-from .config import ProductionConfig
+from .config import DevelopmentConfig, ProductionConfig, TestingConfig
 from .extensions import db, bcrypt
 
 
@@ -14,7 +14,14 @@ def create_app():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
     
-    app.config.from_object(ProductionConfig)
+    # Load configuration based on environment
+    env = getenv('FLASK_ENV', 'development')
+    if env == 'production':
+        app.config.from_object(ProductionConfig)
+    elif env == 'testing':
+        app.config.from_object(TestingConfig)
+    else:
+        app.config.from_object(DevelopmentConfig)
 
     
     # Initialize extensions
